@@ -5,7 +5,7 @@
 
 <p> A simple app that lets you see relevant information based on music genres based on the lastFM API<br></p>
   
-[Find APK here]()
+[Find APK here](https://github.com/Simba-97/Music-Wiki/blob/master/app-debug.apk)
 
 
 ---
