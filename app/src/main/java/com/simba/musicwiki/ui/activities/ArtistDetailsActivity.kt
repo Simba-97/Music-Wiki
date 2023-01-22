@@ -14,7 +14,11 @@ import com.simba.musicwiki.ui.adapters.TrackItemAdapter
 import com.simba.musicwiki.ui.viewModels.MusicEvent
 import com.simba.musicwiki.ui.viewModels.MusicWikiViewModel
 import com.simba.musicwiki.utils.BindingUtils
+import com.simba.musicwiki.utils.showProgressBar
+import com.simba.musicwiki.utils.showToastMessage
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.math.ln
+import kotlin.math.pow
 
 @AndroidEntryPoint
 class ArtistDetailsActivity : AppCompatActivity() {
@@ -59,6 +63,10 @@ class ArtistDetailsActivity : AppCompatActivity() {
                 it.artist?.tags?.tag?.map { tag ->
                     tag.name?.let { it1 -> addChip(it1) }
                 }
+                binding.followers.text =
+                    it.artist?.stats?.listeners?.let { it1 -> withSuffix(it1.toLong()) }
+                binding.playCount.text =
+                    it.artist?.stats?.playcount?.let { it1 -> withSuffix(it1.toLong()) }
                 binding.summary.text = it.artist?.bio?.summary ?: "No description found"
             }
 
@@ -76,6 +84,13 @@ class ArtistDetailsActivity : AppCompatActivity() {
                 val layout = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
                 binding.rvTopTracks.layoutManager = layout
             }
+
+            uiState.isDataLoading.let {
+                binding.progressBar.showProgressBar(it)
+            }
+            uiState.message?.let {
+                showToastMessage(message = it)
+            }
         }
     }
 
@@ -87,6 +102,16 @@ class ArtistDetailsActivity : AppCompatActivity() {
         chip.text = text
 
         binding.chipGroup.addView(chip)
+    }
+
+    private fun withSuffix(count: Long): String? {
+        if (count < 1000) return "" + count
+        val exp = (ln(count.toDouble()) / ln(1000.0)).toInt()
+        return String.format(
+            "%.1f %c",
+            count / 1000.0.pow(exp.toDouble()),
+            "KMBTPE"[exp - 1]
+        )
     }
 
 }

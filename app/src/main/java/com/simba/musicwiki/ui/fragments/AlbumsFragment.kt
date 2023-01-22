@@ -14,6 +14,7 @@ import com.simba.musicwiki.ui.activities.AlbumDetailsActivity
 import com.simba.musicwiki.ui.adapters.AlbumItemAdapter
 import com.simba.musicwiki.ui.viewModels.MusicEvent
 import com.simba.musicwiki.ui.viewModels.MusicWikiViewModel
+import com.simba.musicwiki.utils.showProgressBar
 import com.simba.musicwiki.utils.showToastMessage
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -61,6 +62,10 @@ class AlbumsFragment(tag: String) : Fragment() {
 
             uiState.message?.let {
                 requireActivity().showToastMessage(message = it)
+            }
+
+            uiState.isDataLoading.let {
+                binding.progressBar.showProgressBar(it)
             }
         }
     }

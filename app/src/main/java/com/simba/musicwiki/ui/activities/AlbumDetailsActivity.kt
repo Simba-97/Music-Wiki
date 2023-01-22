@@ -14,6 +14,8 @@ import com.simba.musicwiki.domain.AlbumParams
 import com.simba.musicwiki.ui.viewModels.MusicEvent
 import com.simba.musicwiki.ui.viewModels.MusicWikiViewModel
 import com.simba.musicwiki.utils.BindingUtils
+import com.simba.musicwiki.utils.showProgressBar
+import com.simba.musicwiki.utils.showToastMessage
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -56,6 +58,14 @@ class AlbumDetailsActivity : AppCompatActivity() {
                     tag.name?.let { it1 -> addChip(it1) }
                 }
                 binding.summary.text = it.album.wiki?.summary ?: "No description found"
+            }
+
+            uiState.message?.let {
+                showToastMessage(message = it)
+            }
+
+            uiState.isDataLoading.let {
+                binding.progressBar.showProgressBar(it)
             }
         }
     }

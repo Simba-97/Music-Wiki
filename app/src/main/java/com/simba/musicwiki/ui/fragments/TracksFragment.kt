@@ -12,6 +12,8 @@ import com.simba.musicwiki.databinding.TracksFragmentBinding
 import com.simba.musicwiki.ui.adapters.TrackItemAdapter
 import com.simba.musicwiki.ui.viewModels.MusicEvent
 import com.simba.musicwiki.ui.viewModels.MusicWikiViewModel
+import com.simba.musicwiki.utils.showProgressBar
+import com.simba.musicwiki.utils.showToastMessage
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -47,6 +49,14 @@ class TracksFragment(tag: String) : Fragment() {
             uiState.trackDetails?.let {
                 binding.rvTracks.adapter = it.tracks?.track?.let { it1 -> TrackItemAdapter(it1) }
                 binding.rvTracks.layoutManager = GridLayoutManager(context, 2)
+            }
+
+            uiState.message?.let {
+                requireActivity().showToastMessage(message = it)
+            }
+
+            uiState.isDataLoading.let {
+                binding.progressBar.showProgressBar(it)
             }
         }
     }

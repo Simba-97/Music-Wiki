@@ -9,6 +9,8 @@ import com.simba.musicwiki.databinding.ActivityGenreBinding
 import com.simba.musicwiki.ui.adapters.ProfileTabAdapter
 import com.simba.musicwiki.ui.viewModels.MusicEvent
 import com.simba.musicwiki.ui.viewModels.MusicWikiViewModel
+import com.simba.musicwiki.utils.showProgressBar
+import com.simba.musicwiki.utils.showToastMessage
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -29,6 +31,9 @@ class GenreActivity : AppCompatActivity() {
             )
             initViews(it)
         }
+        binding.icBack.setOnClickListener {
+            finish()
+        }
         subscribeObserver()
     }
 
@@ -38,8 +43,11 @@ class GenreActivity : AppCompatActivity() {
                 binding.genre.text = genreDetails.tag.name
                 binding.summary.text = genreDetails.tag.wiki.summary
             }
-            uiState.albumDetails?.let {
-
+            uiState.message?.let {
+                showToastMessage(message = it)
+            }
+            uiState.isDataLoading.let {
+                binding.progressBar.showProgressBar(it)
             }
         }
     }

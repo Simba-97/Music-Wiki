@@ -2,6 +2,7 @@ package com.simba.musicwiki.ui.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.asLiveData
@@ -13,6 +14,8 @@ import com.simba.musicwiki.ui.viewModels.MusicEvent
 import com.simba.musicwiki.ui.viewModels.MusicWikiViewModel
 import com.simba.musicwiki.utils.checkedChipContents
 import com.simba.musicwiki.utils.isNetworkConnected
+import com.simba.musicwiki.utils.showProgressBar
+import com.simba.musicwiki.utils.showToastMessage
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -56,6 +59,14 @@ class MainActivity : AppCompatActivity() {
                 it.tags?.tag?.map { tag ->
                     tag.name?.let { it1 -> addChip(it1) }
                 }
+            }
+
+            uiState.message?.let {
+                showToastMessage(message = it)
+            }
+
+            uiState.isDataLoading.let {
+                binding.progressBar.showProgressBar(it)
             }
         }
     }
