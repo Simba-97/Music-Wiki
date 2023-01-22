@@ -10,6 +10,8 @@ import com.simba.musicwiki.utils.BindingUtils
 class AlbumItemAdapter(private var list: List<Album>) :
     RecyclerView.Adapter<AlbumItemAdapter.ItemViewHolder>() {
 
+    var onItemClick: ((Album) -> Unit)? = null
+
     inner class ItemViewHolder(val binding: ItemDetailsLayoutBinding) :
         RecyclerView.ViewHolder(binding.root)
 
@@ -28,6 +30,9 @@ class AlbumItemAdapter(private var list: List<Album>) :
                     binding.ivImage,
                     this.image?.get(image.size - 1)?.text
                 )
+            }
+            holder.itemView.setOnClickListener {
+                onItemClick?.invoke(list[position])
             }
         }
     }

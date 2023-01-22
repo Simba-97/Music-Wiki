@@ -1,5 +1,6 @@
 package com.simba.musicwiki.ui.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
 import androidx.recyclerview.widget.GridLayoutManager
 import com.simba.musicwiki.databinding.AlbumsFragmentBinding
+import com.simba.musicwiki.ui.activities.AlbumDetailsActivity
 import com.simba.musicwiki.ui.adapters.AlbumItemAdapter
 import com.simba.musicwiki.ui.viewModels.MusicEvent
 import com.simba.musicwiki.ui.viewModels.MusicWikiViewModel
@@ -46,8 +48,15 @@ class AlbumsFragment(tag: String) : Fragment() {
     private fun subscribeObserver() {
         musicWikiViewModel.uiState.asLiveData().observe(viewLifecycleOwner) { uiState ->
             uiState.albumDetails?.let {
-                binding.rvAlbums.adapter = it.albums?.album?.let { it1 -> AlbumItemAdapter(it1) }
+                val adapter = it.albums?.album?.let { it1 -> AlbumItemAdapter(it1) }
+                binding.rvAlbums.adapter = adapter
                 binding.rvAlbums.layoutManager = GridLayoutManager(context, 2)
+                adapter?.onItemClick = { albumData ->
+                    val intent = Intent(requireContext(), AlbumDetailsActivity::class.java)
+                    intent.putExtra("ALBUM_NAME", albumData.name)
+                    intent.putExtra("ARTIST_NAME", albumData.artist?.name)
+                    startActivity(intent)
+                }
             }
 
             uiState.message?.let {

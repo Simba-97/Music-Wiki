@@ -33,6 +33,14 @@
             android:name=".ui.activities.GenreActivity"
             android:exported="true" />
 
+        <activity
+            android:name=".ui.activities.AlbumDetailsActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.activities.ArtistDetailsActivity"
+            android:exported="true" />
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

@@ -5,6 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.simba.musicwiki.data.models.ArtistDetailsResponse
 import com.simba.musicwiki.data.models.TagListResponse
 import com.simba.musicwiki.data.models.album.AlbumDetailsResponse
+import com.simba.musicwiki.data.models.album_details.AlbumResponse
+import com.simba.musicwiki.data.models.artist_info.ArtistInfoResponse
+import com.simba.musicwiki.data.models.artist_top_albums.ArtistTopAlbumResponse
+import com.simba.musicwiki.data.models.artist_top_tracks.ArtistTopTracksResponse
 import com.simba.musicwiki.data.models.genre.GenreDetailsResponse
 import com.simba.musicwiki.data.models.tracks.TrackDetailsResponse
 import com.simba.musicwiki.domain.*
@@ -22,7 +26,11 @@ class MusicWikiViewModel @Inject constructor(
     private val getGenreDetailsUseCase: GetGenreDetailsUseCase,
     private val getAlbumDetailsUseCase: GetAlbumDetailsUseCase,
     private val getArtistDetailsUseCase: GetArtistDetailsUseCase,
-    private val getTrackDetailsUseCase: GetTrackDetailsUseCase
+    private val getTrackDetailsUseCase: GetTrackDetailsUseCase,
+    private val getAlbumUseCase: GetAlbumUseCase,
+    private val getArtistInfoUseCase: GetArtistInfoUseCase,
+    private val getArtistTopTracksUseCase: GetArtistTopTracksUseCase,
+    private val getArtistTopAlbumsUseCase: GetArtistTopAlbumsUseCase
 ) : ViewModel() {
     private var _uiState = MutableStateFlow(UserUiState())
     val uiState: StateFlow<UserUiState> = _uiState
@@ -34,6 +42,119 @@ class MusicWikiViewModel @Inject constructor(
             is MusicEvent.GetDetailsOfGenre -> getGenreDetails(event.tag)
             is MusicEvent.GetDetailsOfArtists -> getArtistDetails(event.tag)
             is MusicEvent.GetDetailsOfTracks -> getTrackDetails(event.tag)
+            is MusicEvent.GetAlbum -> getAlbum(event.params)
+            is MusicEvent.GetArtistInfo -> getArtistInfo(event.artist)
+            is MusicEvent.GetArtistTopAlbums -> getArtistTopTracks(event.artist)
+            is MusicEvent.GetArtistTopTracks -> getArtistTopAlbums(event.artist)
+        }
+    }
+
+    private fun getArtistTopAlbums(artist: String) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isDataLoading = true) }
+            when (val result = getArtistTopAlbumsUseCase(artist)) {
+                is Result.Error -> {
+                    _uiState.update {
+                        it.copy(
+                            isDataLoading = false,
+                            message = "Something went wrong! Please try again."
+                        )
+                    }
+                }
+                Result.Loading -> {
+                    _uiState.update { it.copy(isDataLoading = true) }
+                }
+                is Result.Success -> {
+                    _uiState.update {
+                        it.copy(
+                            isDataLoading = false,
+                            artistTopAlbumsResponse = result.data
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+
+    private fun getArtistTopTracks(artist: String) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isDataLoading = true) }
+            when (val result = getArtistTopTracksUseCase(artist)) {
+                is Result.Error -> {
+                    _uiState.update {
+                        it.copy(
+                            isDataLoading = false,
+                            message = "Something went wrong! Please try again."
+                        )
+                    }
+                }
+                Result.Loading -> {
+                    _uiState.update { it.copy(isDataLoading = true) }
+                }
+                is Result.Success -> {
+                    _uiState.update {
+                        it.copy(
+                            isDataLoading = false,
+                            artistTopTracksResponse = result.data
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getArtistInfo(artist: String) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isDataLoading = true) }
+            when (val result = getArtistInfoUseCase(artist)) {
+                is Result.Error -> {
+                    _uiState.update {
+                        it.copy(
+                            isDataLoading = false,
+                            message = "Something went wrong! Please try again."
+                        )
+                    }
+                }
+                Result.Loading -> {
+                    _uiState.update { it.copy(isDataLoading = true) }
+                }
+                is Result.Success -> {
+                    _uiState.update {
+                        it.copy(
+                            isDataLoading = false,
+                            artistInfoResponse = result.data
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getAlbum(params: AlbumParams) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isDataLoading = true) }
+            when (val result = getAlbumUseCase(params)) {
+                is Result.Error -> {
+                    _uiState.update {
+                        it.copy(
+                            isDataLoading = false,
+                            message = "Something went wrong! Please try again."
+                        )
+                    }
+                }
+                Result.Loading -> {
+                    _uiState.update { it.copy(isDataLoading = true) }
+                }
+                is Result.Success -> {
+                    _uiState.update {
+                        it.copy(
+                            isDataLoading = false,
+                            albumResponse = result.data
+                        )
+                    }
+                }
+            }
         }
     }
 
@@ -183,6 +304,10 @@ data class UserUiState(
     val genreDetails: GenreDetailsResponse? = null,
     val artistDetails: ArtistDetailsResponse? = null,
     val trackDetails: TrackDetailsResponse? = null,
+    val albumResponse: AlbumResponse? = null,
+    val artistInfoResponse: ArtistInfoResponse? = null,
+    val artistTopTracksResponse: ArtistTopTracksResponse? = null,
+    val artistTopAlbumsResponse: ArtistTopAlbumResponse? = null,
 )
 
 sealed class MusicEvent {
@@ -191,4 +316,8 @@ sealed class MusicEvent {
     data class GetDetailsOfGenre(val tag: String) : MusicEvent()
     data class GetDetailsOfArtists(val tag: String) : MusicEvent()
     data class GetDetailsOfTracks(val tag: String) : MusicEvent()
+    data class GetArtistInfo(val artist: String) : MusicEvent()
+    data class GetArtistTopTracks(val artist: String) : MusicEvent()
+    data class GetArtistTopAlbums(val artist: String) : MusicEvent()
+    data class GetAlbum(val params: AlbumParams) : MusicEvent()
 }
