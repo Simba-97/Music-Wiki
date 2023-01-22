@@ -1,11 +1,13 @@
 package com.simba.musicwiki.ui.activities
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.asLiveData
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
+import com.google.gson.Gson
 import com.simba.musicwiki.R
 import com.simba.musicwiki.databinding.ActivityAlbumDetailsBinding
 import com.simba.musicwiki.domain.AlbumParams

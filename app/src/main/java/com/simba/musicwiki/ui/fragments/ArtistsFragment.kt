@@ -1,5 +1,6 @@
 package com.simba.musicwiki.ui.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
 import androidx.recyclerview.widget.GridLayoutManager
 import com.simba.musicwiki.databinding.ArtistsFragmentBinding
+import com.simba.musicwiki.ui.activities.ArtistDetailsActivity
 import com.simba.musicwiki.ui.adapters.AlbumItemAdapter
 import com.simba.musicwiki.ui.adapters.ArtistItemAdapter
 import com.simba.musicwiki.ui.viewModels.MusicEvent
@@ -46,9 +48,14 @@ class ArtistsFragment(tag: String) : Fragment() {
     private fun subscribeObserver() {
         musicWikiViewModel.uiState.asLiveData().observe(viewLifecycleOwner) { uiState ->
             uiState.artistDetails?.let {
-                binding.rvArtists.adapter =
-                    it.topArtists?.artist?.let { it1 -> ArtistItemAdapter(it1) }
+                val adapter = it.topArtists?.artist?.let { it1 -> ArtistItemAdapter(it1) }
+                binding.rvArtists.adapter = adapter
                 binding.rvArtists.layoutManager = GridLayoutManager(context, 2)
+                adapter?.onItemClick = { artistData ->
+                    val intent = Intent(requireContext(), ArtistDetailsActivity::class.java)
+                    intent.putExtra("ARTIST_NAME", artistData.name)
+                    startActivity(intent)
+                }
             }
         }
     }
