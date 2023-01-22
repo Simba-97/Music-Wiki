@@ -1,10 +1,13 @@
 package com.simba.musicwiki.ui.activities
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.asLiveData
 import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipDrawable
+import com.simba.musicwiki.R
 import com.simba.musicwiki.databinding.ActivityMainBinding
 import com.simba.musicwiki.ui.viewModels.MusicEvent
 import com.simba.musicwiki.ui.viewModels.MusicWikiViewModel
@@ -29,15 +32,19 @@ class MainActivity : AppCompatActivity() {
             )
         }
         subscribeObserver()
-        binding.chipGroup.setOnClickListener {
-            musicWikiViewModel.onTriggerEvent(
-                MusicEvent.GetDetailsOfGenre(binding.chipGroup.checkedChipContents())
-            )
+        binding.chipGroup.setOnCheckedChangeListener { _, _ ->
+            val intent = Intent(this, GenreActivity::class.java)
+            intent.putExtra("TAG", binding.chipGroup.checkedChipContents())
+            startActivity(intent)
+            finish()
         }
     }
 
     private fun addChip(text: String) {
         val chip = Chip(this)
+        val drawable =
+            ChipDrawable.createFromAttributes(this, null, 0, R.style.Widget_MyApp_Chip_Choice)
+        chip.setChipDrawable(drawable)
         chip.text = text
 
         binding.chipGroup.addView(chip)

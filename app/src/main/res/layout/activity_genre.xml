@@ -31,7 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.50" />
+        app:layout_constraintGuide_percent="0.30" />
 
     <ImageView
         android:id="@+id/icBack"
@@ -56,11 +56,13 @@
         tools:text="Genre" />
 
     <TextView
+        android:id="@+id/summary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:fontFamily="@font/barlow"
         android:textColor="@color/black"
+        android:textSize="12sp"
         app:layout_constraintEnd_toStartOf="@id/guideline3"
         app:layout_constraintStart_toStartOf="@id/guideline2"
         app:layout_constraintTop_toBottomOf="@id/genre"
@@ -87,7 +89,7 @@
                 android:layout_height="wrap_content"
                 android:theme="@style/Theme.ProfileAppBar"
                 app:tabIndicatorColor="@color/black"
-                app:tabIndicatorFullWidth="false"
+                app:tabIndicatorFullWidth="true"
                 app:tabMode="fixed"
                 app:tabSelectedTextColor="@color/black" />
 

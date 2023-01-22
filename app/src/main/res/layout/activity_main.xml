@@ -65,13 +65,15 @@
 
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/chipGroup"
+        style="@style/Widget.MaterialComponents.Chip.Choice"
         android:layout_width="0dp"
-        app:singleSelection="true"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="@id/guideline3"
         app:layout_constraintStart_toStartOf="@id/guideline2"
-        app:layout_constraintTop_toBottomOf="@id/chooseGenre" />
+        app:layout_constraintTop_toBottomOf="@id/chooseGenre"
+        app:selectionRequired="true"
+        app:singleSelection="true" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
