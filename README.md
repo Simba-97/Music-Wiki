@@ -20,6 +20,9 @@ An Android App for viewing details of songs of different genres along with their
 You are requested to fork the project and then clone the forked project to your local device. Run the cloned repository with the help of Android Studio, <b>[Important]</b> The gradle is supposed to <b>fail</b> since the value of the ``API_KEY`` is not found. You should head to [Last FM API docs](https://www.last.fm/api) and follow the steps or head down to [create an account](https://www.last.fm/login?next=/api/account/create) to generate your ``API_KEY``. Replace the ``BuildConfig.API_KEY`` with your generated API_KEY and run the application.
 
 Please find also a ``app-debug.apk`` attached in the repo. You can go ahead download the APK and get started immediately. [Please note the support for the APK might end soon. In case the downloaded APK doesn't work or if you're unable to see data with the downloaded APK, you are suggested to follow the steps above].
+## **Features**
+The App has a very simple and minimalist UI, The app lets you select from a range a different genre. 
+Each genre has a lot of albums, artists and tracks associated with it. After you make a selection of the genre. You can view details of any artist, album or track and also the stats associated with them.
 
 ## **Functionality & Concepts used**
 
